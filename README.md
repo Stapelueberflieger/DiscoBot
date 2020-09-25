@@ -8,6 +8,9 @@ Discord management Bot
 - help
 - security features (privileges, warnings, environment vars)
 
+## Next Goals:
+- implement help to show command usage
+
 ## ToDo's
 - Setup instructions
 - Proper config
