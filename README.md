@@ -6,7 +6,7 @@ Discord management Bot
 - move users from voice channels
 - coinflip
 - help
-- security features (privileges and warnings)
+- security features (privileges, warnings, environment vars)
 
 ## ToDo's
 - Setup instructions
