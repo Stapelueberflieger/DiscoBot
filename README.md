@@ -1,7 +1,7 @@
 # DiscoBot
 Discord management Bot
 
-##Features:
+## Features:
 - assign roles & manage which roles can be self-assigned
 - move users from voice channels
 - coinflip
