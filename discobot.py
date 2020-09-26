@@ -90,13 +90,12 @@ async def roles_all(ctx):
 
 @bot.command(name="allowed_roles", help="[ADMIN] Rollen bearbeiten, die sich Benutzer selbst geben dürfen.")
 @commands.has_role(BOTGROUP)
-async def move(ctx, *args):
+async def allowed_roles(ctx, *args):
     if dangerous_warning:
         await ctx.send(f"Dieser Befehl kann deinen Sever schädigen! \nWenn du hier z.B. Admin einträgst kann sich jeder selbst zum Admin machen!\n -> Wenn du weißt was du tust tippe \"{KEYWORD}unlock\" .")
     else:
         update_allowed_roles(args)
         await ctx.send("Datei erstellt.")
-        roles_all()
 
 
 @bot.command(name="assign", help="Weist eine Rolle zu.")
@@ -110,6 +109,17 @@ async def assign(ctx, role_name: str):
         await ctx.send(f"Dir wurde die Rolle \"{role}\" zugewiesen!")
     else:
         await ctx.send("Diese Rolle darf nur vom Administrator zugewiesen werden.")  
+
+
+@bot.command(name="dismiss", help="Entfernt eine Rolle.")
+async def dismiss(ctx, role_name: str):
+    member = ctx.author
+    role = discord.utils.get(member.roles, name=role_name)
+    if role in member.roles:
+        await member.remove_roles(role)
+        await ctx.send(f"Dir wurde die Rolle \"{role}\" aberkannt.")
+    else:
+        await ctx.send("Diese Rolle hast du nicht. Vertippt? (Groß- und Kleinschreibung beachten!)")
 
 
 @bot.command(name="move", help="[MOVER] Veschiebt Jemanden in einen Channel")
@@ -132,10 +142,10 @@ async def move_all(ctx, channel_name):
     if channel is None:
         await ctx.send(f'Channel \"{channel_name}\" nicht gefunden!')
     else:
+        await ctx.send(f'Schiebung nach: \"{channel_name}\" !')
         for voice_channel in ctx.guild.voice_channels:
             for member in voice_channel.members:
                 await member.move_to(channel, reason="Bot allmove.")
-
 
 
 @bot.command(name="unlock", help="[ADMIN] Ermöglich das Ändern sicherheitsrelevanter Einstellungen.")
@@ -149,7 +159,7 @@ async def unlock(ctx):
 
 @bot.command(name="lock", help="[ADMIN] Sperrt Ändern sicherheitsrelevanter Einstellungen.")
 @commands.has_role(BOTGROUP)
-async def unlock(ctx):
+async def lock(ctx):
     global dangerous_warning
     dangerous_warning = True
     print(f"[INFO]: {ctx.author} locked {ctx.guild}")
@@ -169,7 +179,7 @@ def get_allowed_roles():
     if file.mode == 'r':
         contents = file.read()
     file.close()
-    roles = contents.split()
+    roles = contents.splitlines()
     return roles
 
 
